@@ -3,6 +3,8 @@ package se.lexicon.marketplace_api.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;
+import se.lexicon.marketplace_api.entity.Advertisement;
+import se.lexicon.marketplace_api.entity.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,4 +35,28 @@ public record AdvertisementDto(
         @Positive(message = "User ID must be greater than 0")
         Integer userId
 ) {
+    // --- Conversion method: Entity → DTO ---
+    // adding this here to get the creation of user to work if they are making an advert and not being reg.
+    public static AdvertisementDto fromEntity(Advertisement ad) {
+        return new AdvertisementDto(
+                ad.getId(),
+                ad.getTitle(),
+                ad.getDescription(),
+                ad.getExpirationDate(),
+                ad.getPrice(),
+                ad.getUser().getId()
+        );
+    }
+
+    // --- Conversion method: DTO → Entity ---
+    public Advertisement toEntity(User user) {
+        return Advertisement.builder()
+                .id(this.id())
+                .title(this.title())
+                .description(this.description())
+                .expirationDate(this.expirationDate())
+                .price(this.price())
+                .user(user)
+                .build();
+    }
 }

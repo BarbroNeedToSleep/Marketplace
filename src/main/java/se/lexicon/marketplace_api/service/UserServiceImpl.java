@@ -23,11 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserDto userDTO) {
-        User user = User.builder()
-                .email(userDTO.email())
-                .password(userDTO.password())
-                .build();
-        return userRepository.save(user);
+        return userRepository.save(userDTO.toEntity());
     }
 
     @Override

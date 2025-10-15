@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface AdvertisementService {
 
-    Advertisement createAdvertisement(AdvertisementDto advertisementDto);
+    //Advertisement createAdvertisement(AdvertisementDto advertisementDto);
+
+    AdvertisementDto createAdvertisementWithUser(String email, String password, AdvertisementDto adDto);
 
     List<Advertisement> findAllActiveAdvertisements();
 

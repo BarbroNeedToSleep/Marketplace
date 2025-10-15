@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import se.lexicon.marketplace_api.entity.User;
 
 @Builder
 
@@ -20,4 +21,24 @@ public record UserDto(
         @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
         String password
 ) {
+
+    // --- Conversion method: Entity → DTO ---
+    // adding this here to get the creation of user to work if they are making an advert and not being reg.
+
+    public static UserDto fromEntity(User user) {
+
+        return new UserDto(
+                user.getId(),
+                user.getEmail(),
+                null
+        );
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .id(this.id())
+                .email(this.email)
+                .password(this.password)
+                .build();
+    }
 }
