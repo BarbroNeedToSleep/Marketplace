@@ -7,13 +7,12 @@ import java.util.List;
 
 public interface AdvertisementService {
 
-    //Advertisement createAdvertisement(AdvertisementDto advertisementDto);
 
     AdvertisementDto createAdvertisementWithUser(String email, String password, AdvertisementDto adDto);
 
-    List<Advertisement> findAllActiveAdvertisements();
+    List<AdvertisementDto> findAllActiveAdvertisements();
 
-    List<Advertisement> findByUserId(Integer userId);
+    List<AdvertisementDto> findByUserId(Integer userId);
 
-    List<Advertisement> searchByTitleOrDescription(String keyword);
+    List<AdvertisementDto> searchByTitleOrDescription(String keyword);
 }

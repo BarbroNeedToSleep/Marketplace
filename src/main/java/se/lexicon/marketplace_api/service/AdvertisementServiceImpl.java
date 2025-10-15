@@ -22,34 +22,49 @@ public class AdvertisementServiceImpl implements AdvertisementService{
 
     @Override
     public AdvertisementDto createAdvertisementWithUser(String email, String password, AdvertisementDto adDto) {
-        User user = userService.findByEmail(email);
-        if (user == null) {
-            user = userService.createUser(new UserDto(null, email, password));
+        // UserDto from service
+        UserDto userDto = userService.findByEmail(email);
+        if (userDto == null) {
+            userDto = userService.createUser(new UserDto(null, email, password));
         } else {
-            user = userService.validateUser(email, password); // use the returned user
+            userDto = userService.validateUser(email, password);
         }
 
-        Advertisement adEntity = adDto.toEntity(user);
+        // Convert DTO → entity for Advertisement
+        User userEntity = userDto.toEntity();
+
+        Advertisement adEntity = adDto.toEntity(userEntity);
         Advertisement savedAd = advertisementRepository.save(adEntity);
+
         return AdvertisementDto.fromEntity(savedAd);
     }
 
-    @Override
-    public List<Advertisement> findAllActiveAdvertisements() {
 
-        return advertisementRepository.findByExpirationDateAfter(LocalDate.now());
+
+    @Override
+    public List<AdvertisementDto> findAllActiveAdvertisements() {
+        return advertisementRepository.findByExpirationDateAfter(LocalDate.now())
+                .stream()
+                .map(AdvertisementDto::fromEntity)
+                .toList();
+    }
+
+
+    @Override
+    public List<AdvertisementDto> findByUserId(Integer userId) {
+        return advertisementRepository.findByUserId(userId)
+                .stream()
+                .map(AdvertisementDto::fromEntity)
+                .toList();
     }
 
     @Override
-    public List<Advertisement> findByUserId(Integer userId) {
-
-        return advertisementRepository.findByUserId(userId);
-    }
-
-    @Override
-    public List<Advertisement> searchByTitleOrDescription(String keyword) {
-
-        return advertisementRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword);
+    public List<AdvertisementDto> searchByTitleOrDescription(String keyword) {
+        return advertisementRepository
+                .findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword)
+                .stream()
+                .map(AdvertisementDto::fromEntity)
+                .toList();
     }
 
 }

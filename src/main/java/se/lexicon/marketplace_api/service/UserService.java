@@ -5,9 +5,9 @@ import se.lexicon.marketplace_api.entity.User;
 
 public interface UserService {
 
-    User findByEmail(String email);
+    UserDto findByEmail(String email);
 
-    User createUser(UserDto userDTO);
+    UserDto createUser(UserDto userDTO);
 
-    User validateUser(String email, String password);
+    UserDto validateUser(String email, String password);
 }

@@ -16,25 +16,27 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User findByEmail(String email) {
+    public UserDto findByEmail(String email) {
         return userRepository.findByEmailIgnoreCase(email)
+                .map(UserDto::fromEntity)
                 .orElse(null);
     }
 
     @Override
-    public User createUser(UserDto userDTO) {
-        return userRepository.save(userDTO.toEntity());
+    public UserDto createUser(UserDto userDTO) {
+        User saved = userRepository.save(userDTO.toEntity());
+        return UserDto.fromEntity(saved);
     }
 
     @Override
-    public User validateUser(String email, String password) {
-        return userRepository.findByEmailIgnoreCase(email)
-                .map(user -> {
-                    if (!user.getPassword().equals(password)) {
-                        throw new RuntimeException("Invalid password");
-                    }
-                    return user;
-                })
+    public UserDto validateUser(String email, String password) {
+        User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return UserDto.fromEntity(user);
     }
 }
