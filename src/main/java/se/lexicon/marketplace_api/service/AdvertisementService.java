@@ -1,7 +1,7 @@
 package se.lexicon.marketplace_api.service;
 
 import se.lexicon.marketplace_api.dto.AdvertisementDto;
-import se.lexicon.marketplace_api.entity.Advertisement;
+
 
 import java.util.List;
 

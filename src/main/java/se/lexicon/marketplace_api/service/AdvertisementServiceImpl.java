@@ -41,6 +41,8 @@ public class AdvertisementServiceImpl implements AdvertisementService{
 
 
 
+
+
     @Override
     public List<AdvertisementDto> findAllActiveAdvertisements() {
         return advertisementRepository.findByExpirationDateAfter(LocalDate.now())
@@ -66,5 +68,8 @@ public class AdvertisementServiceImpl implements AdvertisementService{
                 .map(AdvertisementDto::fromEntity)
                 .toList();
     }
+
+
+
 
 }

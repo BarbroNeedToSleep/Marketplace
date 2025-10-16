@@ -1,0 +1,66 @@
+### Create Advertisement (auto-register or login)
+POST http://localhost:8080/api/ads
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "alice@example.com",
+    "password": "Secret123"
+  },
+  "ad": {
+    "title": "Brand New Bike",
+    "description": "A fast, lightweight bike for city rides",
+    "expirationDate": "2025-12-31",
+    "price": 499.99
+  }
+}
+
+### Create another ad for the same user
+POST http://localhost:8080/api/ads
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "alice@example.com",
+    "password": "Secret123"
+  },
+  "ad": {
+    "title": "Mountain Bike",
+    "description": "Durable bike for rough terrain",
+    "expirationDate": "2025-12-31",
+    "price": 799.99
+  }
+}
+
+### Create ad with wrong password (should fail)
+POST http://localhost:8080/api/ads
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "alice@example.com",
+    "password": "WrongPassword"
+  },
+  "ad": {
+    "title": "Road Bike",
+    "description": "Speedy bike for paved roads",
+    "expirationDate": "2025-12-31",
+    "price": 699.99
+  }
+}
+
+### Get all active ads
+GET http://localhost:8080/api/ads
+
+### Get all active ads with keyword filter
+GET http://localhost:8080/api/ads?keyword=bike
+
+### Get ads for a specific user (login required)
+POST http://localhost:8080/api/ads/my-ads
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "Secret123"
+}
+

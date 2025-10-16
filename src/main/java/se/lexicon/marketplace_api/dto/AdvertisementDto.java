@@ -29,11 +29,8 @@ public record AdvertisementDto(
         @NotNull(message = "Price is required")
         @DecimalMax(value = "1000000.00", message = "Price must be less than 1,000,000.00")
         @Positive(message = "Price must be greater than 0")
-        BigDecimal price,
+        BigDecimal price
 
-        @NotNull(message = "User ID is required")
-        @Positive(message = "User ID must be greater than 0")
-        Integer userId
 ) {
     // --- Conversion method: Entity → DTO ---
     // adding this here to get the creation of user to work if they are making an advert and not being reg.
@@ -43,8 +40,7 @@ public record AdvertisementDto(
                 ad.getTitle(),
                 ad.getDescription(),
                 ad.getExpirationDate(),
-                ad.getPrice(),
-                ad.getUser().getId()
+                ad.getPrice()
         );
     }
 
