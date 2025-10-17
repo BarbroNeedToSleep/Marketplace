@@ -49,6 +49,17 @@ Content-Type: application/json
   }
 }
 
+### Create ad with with all the information wrong (should fail)
+POST http://localhost:8080/api/ads
+Content-Type: application/json
+
+{
+  "user": { "email": "not-an-email", "password": "" },
+  "ad": { "title": "", "description": "x", "expirationDate": "2020-01-01", "price": -5 }
+}
+
+
+
 ### Get all active ads
 GET http://localhost:8080/api/ads
 
@@ -63,4 +74,6 @@ Content-Type: application/json
   "email": "alice@example.com",
   "password": "Secret123"
 }
+
+
 

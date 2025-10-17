@@ -1,6 +1,8 @@
 package se.lexicon.marketplace_api.controller;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/ads")
-
-
 @Validated
 public class AdController {
 
@@ -26,10 +26,17 @@ public class AdController {
 
     public AdController(AdvertisementService advertisementService, UserService userService) {
         this.advertisementService = advertisementService;
-        this.userService=userService;
+        this.userService = userService;
     }
 
-    // 1️Create Advertisement (auto-register or validate user)
+
+    @Operation(summary = "Create an advertisement",
+            description = "Auto-register user if new or validate credentials, then create ad")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Advertisement created successfully"),
+            @ApiResponse(responseCode = "400", description = "Validation failed"),
+            @ApiResponse(responseCode = "401", description = "Invalid user credentials")
+    })
     @PostMapping
     public ResponseEntity<AdvertisementDto> createAd(
             @Valid @RequestBody CreateAdvertisementRequestDto request
@@ -47,7 +54,11 @@ public class AdController {
     }
 
 
-    // Get All Active Ads with optional keyword search
+    @Operation(summary = "Get all active advertisements",
+            description = "Return all ads that are not expired. Optional keyword search by title or description.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of active advertisements returned")
+    })
     @GetMapping
     public ResponseEntity<List<AdvertisementDto>> getAllActiveAds(
             @RequestParam(required = false) String keyword
@@ -61,13 +72,20 @@ public class AdController {
         return ResponseEntity.ok(ads);
     }
 
-    // Get Ads for a specific user
+
+    @Operation(summary = "Get user's advertisements",
+            description = "Return ads created by a specific user. Requires user credentials.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User's advertisements returned"),
+            @ApiResponse(responseCode = "401", description = "Invalid user credentials")
+    })
     @PostMapping("/my-ads")
     public ResponseEntity<List<AdvertisementDto>> getUserAds(@Valid @RequestBody UserDto loginDto) {
-        // Validate user credentials
+
         UserDto user = userService.validateUser(loginDto.email(), loginDto.password());
-        // Fetch ads for this user
+
         List<AdvertisementDto> userAds = advertisementService.findByUserId(user.id());
         return ResponseEntity.ok(userAds);
     }
 }
+

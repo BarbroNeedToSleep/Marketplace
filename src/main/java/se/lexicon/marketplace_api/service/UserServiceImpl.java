@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.lexicon.marketplace_api.dto.UserDto;
 import se.lexicon.marketplace_api.entity.User;
+import se.lexicon.marketplace_api.exception.InvalidCredentialsException;
 import se.lexicon.marketplace_api.repo.UserRepository;
 
 
@@ -31,10 +32,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto validateUser(String email, String password) {
         User user = userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new InvalidCredentialsException("User not found"));
 
         if (!user.getPassword().equals(password)) {
-            throw new RuntimeException("Invalid password");
+            throw new InvalidCredentialsException("Invalid password");
         }
 
         return UserDto.fromEntity(user);

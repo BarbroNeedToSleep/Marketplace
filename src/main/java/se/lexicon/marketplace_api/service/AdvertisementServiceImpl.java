@@ -68,8 +68,4 @@ public class AdvertisementServiceImpl implements AdvertisementService{
                 .map(AdvertisementDto::fromEntity)
                 .toList();
     }
-
-
-
-
 }
